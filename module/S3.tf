@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "bucket_alb_access_log" {
 }
 
 ##Public Access Block
-resource "aws_s3_bucket_public_access_block" "bucket_public_access" {
+resource "aws_s3_bucket_public_access_block" "bucket_alb_public_access" {
   bucket                  = aws_s3_bucket.bucket_alb_access_log.id
   block_public_acls       = true
   block_public_policy     = true
@@ -17,7 +17,7 @@ resource "aws_s3_bucket_public_access_block" "bucket_public_access" {
 }
 
 ##Versioning
-resource "aws_s3_bucket_versioning" "bucket_versiong" {
+resource "aws_s3_bucket_versioning" "bucket_alb_versiong" {
   bucket = aws_s3_bucket.bucket_alb_access_log.id
   versioning_configuration {
     status = "Disabled"
@@ -25,7 +25,7 @@ resource "aws_s3_bucket_versioning" "bucket_versiong" {
 }
 
 ##Server Side Encryption
-resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_server_side_encryption" {
+resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_alb_server_side_encryption" {
   bucket = aws_s3_bucket.bucket_alb_access_log.id
   rule {
     apply_server_side_encryption_by_default {
@@ -35,7 +35,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_server_sid
 }
 
 ##Bucket ACL
-resource "aws_s3_bucket_acl" "bucket_acl" {
+resource "aws_s3_bucket_acl" "bucket_alb_acl" {
   bucket = aws_s3_bucket.bucket_alb_access_log.id
   acl    = "private"
 }
@@ -58,4 +58,47 @@ data "aws_iam_policy_document" "iam_policy_alb_access_log" {
 resource "aws_s3_bucket_policy" "bucket_policy_alb_access_log" {
   bucket = aws_s3_bucket.bucket_alb_access_log.id
   policy = data.aws_iam_policy_document.iam_policy_alb_access_log.json
+}
+
+
+##Bucket for WAF log
+resource "aws_s3_bucket" "bucket_waf_access_log" {
+  bucket = "aws-waf-logs-${var.general_config["project"]}-${var.general_config["env"]}-accesslog-bucket"
+
+  tags = {
+    Name = "aws-waf-logs-${var.general_config["project"]}-${var.general_config["env"]}-accesslog-bucket"
+  }
+}
+
+##Public Access Block
+resource "aws_s3_bucket_public_access_block" "bucket_waf_public_access" {
+  bucket                  = aws_s3_bucket.bucket_waf_access_log.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+##Versioning
+resource "aws_s3_bucket_versioning" "bucket_waf_versiong" {
+  bucket = aws_s3_bucket.bucket_waf_access_log.id
+  versioning_configuration {
+    status = "Disabled"
+  }
+}
+
+##Server Side Encryption
+resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_waf_server_side_encryption" {
+  bucket = aws_s3_bucket.bucket_waf_access_log.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+##Bucket ACL
+resource "aws_s3_bucket_acl" "bucket_waf_acl" {
+  bucket = aws_s3_bucket.bucket_waf_access_log.id
+  acl    = "private"
 }

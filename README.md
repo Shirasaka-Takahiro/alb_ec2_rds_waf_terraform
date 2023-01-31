@@ -5,8 +5,11 @@ ex)example-dev-alb-accesslog-bucket
 ■Resources
 <br />
 EC2(web) x 1 
+<br />
 ALb x 1(HTTP Listener only)
+<br />
 RDS x 1
+<br />
 WAF x 1
 
 ■Deploy

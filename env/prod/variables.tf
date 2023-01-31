@@ -3,15 +3,14 @@ variable "general_config" {
   type = map(any)
   default = {
     project = "example"
-    env     = "dev"
+    env     = "prod"
   }
 }
 
 ##Regions
 variable "regions" {
   default = {
-    tokyo    = "ap-northeast-1"
-    virginia = "us-east-1"
+    tokyo = "ap-northeast-1"
   }
 }
 
@@ -103,4 +102,72 @@ variable "key_name" {
   description = "key name of the key pair"
   type        = string
   default     = "example"
+}
+
+variable "public_key_path_web" {
+  description = "key path of the web instance's public key. Example: ~/.ssh/terraform.pub"
+  type        = string
+}
+
+##Web ACL
+variable "webacl_scope" {
+  description = "scope of web acl. REGIONAL or CLOUDFRONT"
+  type        = string
+}
+
+##RDS Option Group
+variable "engine_name" {
+  type    = string
+  default = "mysql"
+}
+
+variable "major_engine_version" {
+  type    = string
+  default = "8.0"
+}
+
+##RDS
+variable "engine" {
+  type    = string
+  default = "mysql"
+}
+
+variable "engine_version" {
+  type    = string
+  default = "8.0"
+}
+
+variable "username" {
+  description = "root username of db instance"
+  type        = string
+  default     = "admin"
+}
+
+variable "password" {
+  description = "root password of db instance"
+  type        = string
+  default     = "Password1!"
+}
+
+variable "instance_class" {
+  description = "The class of db instance"
+  type        = string
+  default     = "db.t3.medium"
+}
+
+variable "storage_type" {
+  description = "The storage type of db instance"
+  type        = string
+  default     = "gp2"
+}
+
+variable "allocated_storage" {
+  description = "The allocated storage of db instance"
+  default     = 20
+}
+
+variable "multi_az" {
+  description = "multi az of db instance"
+  type        = string
+  default     = "true"
 }
