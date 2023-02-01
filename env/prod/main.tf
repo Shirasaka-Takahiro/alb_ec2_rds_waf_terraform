@@ -5,12 +5,12 @@ provider "aws" {
 
 terraform {
   required_version = "~> 1.3.6"
-  backend "s3" {
-    bucket  = "example-prod-tfstate-bucket"
-    region  = "ap-northeast-1"
-    key     = "prod.tfstate"
-    profile = "terraform-user"
-  }
+  #backend "s3" {
+  #  bucket  = "example-prod-tfstate-bucket"
+  #  region  = "ap-northeast-1"
+  #  key     = "prod.tfstate"
+  #  profile = "terraform-user"
+  #}
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -48,4 +48,8 @@ module "prod" {
   storage_type         = var.storage_type
   allocated_storage    = var.allocated_storage
   multi_az             = var.multi_az
+  sns_email                         = var.sns_email
+  cwa_actions                       = var.cwa_actions
+  cwa_threshold_rds_freeablememory  = var.cwa_threshold_rds_freeablememory
+  cwa_threshold_rds_freeablestorage = var.cwa_threshold_rds_freeablestorage
 }
